@@ -1,0 +1,21 @@
+name: Android Export
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import project
+        run: godot --headless --editor --quit --path .
+      - name: Export Android
+        run: godot --headless --path . --export-debug "Android" build/ShadowLegends-debug.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShadowLegends-debug-apk
+          path: build/ShadowLegends-debug.apk
